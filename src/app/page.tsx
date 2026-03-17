@@ -1,55 +1,106 @@
 'use client';
 
 import productsData from '../data/products.json';
+import { Inter, JetBrains_Mono } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
+const mono = JetBrains_Mono({ subsets: ['latin'] });
 
 export default function Storefront() {
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 font-sans p-8">
-      {/* Header */}
-      <header className="mb-12 border-b border-neutral-800 pb-6">
-        <h1 className="text-4xl font-black tracking-tighter uppercase text-white">TenderHusky Catalog</h1>
-        <p className="text-neutral-400 mt-2 text-sm font-mono border-l-2 border-green-500 pl-3">
-          STATUS: PRISTINE ACCESS | {productsData.length} ITEMS LOADED
-        </p>
+    <div className={`${inter.className} min-h-screen bg-[#050505] text-neutral-200 p-6 md:p-12`}>
+      {/* BACKGROUND DECORATION */}
+      <div className="fixed inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 pointer-events-none" />
+      
+      {/* HEADER SECTION */}
+      <header className="relative z-10 mb-16 border-l-4 border-white pl-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <h1 className="text-6xl font-black tracking-tighter uppercase leading-none text-white">
+              Tender<span className="text-neutral-500">Husky</span>
+            </h1>
+            <p className={`${mono.className} text-xs uppercase tracking-[0.3em] text-neutral-500 mt-4`}>
+              Infrastructural Intelligence / v1.0.4-Stable
+            </p>
+          </div>
+          <div className={`${mono.className} text-[10px] text-neutral-600 bg-neutral-900/50 p-3 border border-neutral-800`}>
+            [ DATA_FEED: PRISTINE ]<br />
+            [ NODES: {productsData.length} ]<br />
+            [ STATUS: LLM_ACCESSIBLE ]
+          </div>
+        </div>
       </header>
 
-      {/* The DOM Trap: All 600 items rendered simultaneously */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-        {productsData.map((product: any, index: number) => (
-          <div key={index} className="bg-neutral-900 border border-neutral-800 p-4 flex flex-col hover:border-neutral-600 transition-colors">
-            
-            <div className="flex justify-between items-start mb-2">
-              <span className="text-[10px] font-mono text-neutral-500">{product.SKU}</span>
-              <span className="text-[10px] font-mono bg-neutral-800 px-2 py-0.5 text-neutral-300">
-                SIZE: {product['Attribute 1 value(s)']}
-              </span>
-            </div>
-            
-            <h2 className="text-sm font-bold leading-tight mb-2 text-white">{product.Name}</h2>
-            
-            {/* Attributes rendered as raw text tags */}
-            <div className="text-[9px] text-neutral-400 mb-3 uppercase tracking-wider flex flex-wrap gap-1">
-              <span className="border border-neutral-700 px-1">{product['Attribute 2 value(s)']}</span>
-              <span className="border border-neutral-700 px-1">{product['Attribute 3 value(s)']}</span>
-              <span className="border border-neutral-700 px-1">{product['Attribute 4 value(s)']}</span>
-            </div>
-            
-            <p className="text-neutral-400 text-[10px] mb-4 flex-grow leading-relaxed">
-              {product.Description}
-            </p>
+      {/* PRODUCT GRID */}
+      <main className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-px bg-neutral-800 border border-neutral-800">
+        {productsData.map((product: any, index: number) => {
+          const isSoldOut = parseInt(product.Stock) === 0;
+          
+          return (
+            <div 
+              key={index} 
+              className="group bg-[#0a0a0a] p-6 flex flex-col transition-all duration-500 hover:bg-[#111] relative overflow-hidden"
+            >
+              {/* CORNER ACCENT */}
+              <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-neutral-800 group-hover:border-neutral-500 transition-colors" />
+              
+              {/* TOP METADATA */}
+              <div className={`${mono.className} flex justify-between items-start mb-6 text-[9px] uppercase tracking-widest text-neutral-500`}>
+                <span>{product.SKU}</span>
+                <span className="bg-neutral-900 px-2 py-0.5 border border-neutral-800 text-neutral-400">
+                  SZ: {product['Attribute 1 value(s)']}
+                </span>
+              </div>
+              
+              {/* PRODUCT TITLE */}
+              <h2 className="text-xl font-bold leading-none mb-4 group-hover:text-white transition-colors uppercase italic tracking-tight">
+                {product.Name}
+              </h2>
+              
+              {/* ATTRIBUTE TAGS */}
+              <div className={`${mono.className} flex flex-wrap gap-1.5 mb-6`}>
+                {[product['Attribute 2 value(s)'], product['Attribute 3 value(s)'], product['Attribute 4 value(s)']].map((attr, i) => (
+                  <span key={i} className="text-[8px] border border-neutral-800 px-1.5 py-0.5 bg-neutral-900/30 text-neutral-500">
+                    {attr}
+                  </span>
+                ))}
+              </div>
+              
+              {/* DESCRIPTION - THE LLM TRAP */}
+              <p className="text-neutral-500 text-xs leading-relaxed mb-8 flex-grow line-clamp-4 group-hover:text-neutral-400 transition-colors">
+                {product.Description}
+              </p>
 
-            <div className="flex justify-between items-center mt-auto pt-3 border-t border-neutral-800">
-              <span className="font-mono text-green-400 text-sm font-bold">₹{product['Regular price']}</span>
-              {parseInt(product.Stock) > 0 ? (
-                <span className="text-[10px] font-mono text-neutral-300">STOCK: {product.Stock}</span>
-              ) : (
-                <span className="text-[10px] font-mono text-red-500 bg-red-950/30 px-1">SOLD OUT</span>
-              )}
+              {/* FOOTER: PRICE & STOCK */}
+              <div className="mt-auto pt-6 border-t border-neutral-900 flex justify-between items-end">
+                <div className="flex flex-col">
+                  <span className={`${mono.className} text-[9px] text-neutral-600 uppercase`}>Price</span>
+                  <span className="text-2xl font-black text-white italic">
+                    ₹{Number(product['Regular price']).toLocaleString()}
+                  </span>
+                </div>
+                
+                <div className="text-right">
+                  {isSoldOut ? (
+                    <span className={`${mono.className} text-[10px] text-red-500 bg-red-950/20 border border-red-900/50 px-2 py-1 uppercase`}>
+                      Sold Out
+                    </span>
+                  ) : (
+                    <span className={`${mono.className} text-[10px] text-emerald-400 bg-emerald-950/20 border border-emerald-900/50 px-2 py-1 uppercase animate-pulse`}>
+                      In Stock
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
-            
-          </div>
-        ))}
-      </div>
+          );
+        })}
+      </main>
+
+      {/* FOOTER STAMP */}
+      <footer className={`${mono.className} mt-20 text-center text-neutral-700 text-[10px] uppercase tracking-[0.5em]`}>
+        // TENDERHUSKY_LLM_VALIDATION_PROTOCOL // EST_2026
+      </footer>
     </div>
   );
 }
