@@ -1,3 +1,10 @@
+import './globals.css'
+
+export const metadata = {
+  title: 'TenderHusky Demo Store',
+  description: 'High-Fidelity AI Commerce Infrastructure',
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -5,9 +12,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body style={{ margin: 0, padding: 0, backgroundColor: '#050505' }}>
-        {children}
-      </body>
+      <body className="bg-[#050505]">{children}</body>
     </html>
   )
 }
