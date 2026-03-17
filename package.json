@@ -1,5 +1,5 @@
 {
-  "name": "handyloom-demo",
+  "name": "tenderhusky-demo",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -10,8 +10,7 @@
   "dependencies": {
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest",
-    "lucide-react": "latest"
+    "react-dom": "latest"
   },
   "devDependencies": {
     "autoprefixer": "latest",
